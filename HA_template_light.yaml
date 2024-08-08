@@ -1,0 +1,25 @@
+type: template
+content: |
+  {% set total = namespace(found=0) %}
+  {%- for ent in state_attr(entity, 'entity_id') -%}
+    {% if is_state(ent, 'on') %}
+      {% set total.found = total.found + 1 %}
+    {% endif %}
+  {%- endfor %}
+  {% if total.found > 0 %}
+  ({{total.found}}) Lights ON
+  {% else %}
+  Lights Off
+  {% endif %}
+icon: mdi:lightbulb-group
+icon_color: |-
+  {% if is_state(entity, 'on') %}
+    orange
+  {% else %}
+    grey
+  {% endif %}
+tap_action:
+  action: toggle
+hold_action:
+  action: more-info
+entity: light.bedroom_lights
